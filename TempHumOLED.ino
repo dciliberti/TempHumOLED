@@ -34,7 +34,7 @@ Adafruit_SSD1306 display(OLED_RESET);
 DHT dht(2, DHT22);
 
 // Variables
-double temp, hum, time; // temperature, relative humidity, time
+double temp, hum, time, timeSec; // temperature, relative humidity, time
 
 // Variables initialization
 double minTemp = 99;  // minimum temperature
@@ -70,8 +70,8 @@ void loop() {
 
   // Display time passed since the program started
   time = millis();
-  time = time/1000;
-  Serial.print(time,1);
+  timeSec = time/1000;
+  Serial.print(timeSec,1);
   Serial.print("s\t");
 
   // Read and display humidity
@@ -137,11 +137,15 @@ void loop() {
   // Display elapsed time anyway below
   display.setCursor(0, 50);
   display.print("Time:");
-  display.print(time,1);
+  display.print(timeSec,1);
   display.print("s");
-  
+
   display.display();
-  delay(1000);
+  // delay(1000);
+  // Use millis() instead of delay() to keep accurate timing
+  while (millis() < time + 1000) {
+    // wait a time fraction between the start of the loop and this line
+  }
   display.clearDisplay();
 
 }
